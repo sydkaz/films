@@ -14,6 +14,9 @@ import java.util.*;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 
+import static akka.http.javadsl.server.PathMatchers.longSegment;
+import static akka.http.javadsl.server.PathMatchers.segment;
+
 
 class FilmServer extends HttpApp {
 
@@ -27,7 +30,10 @@ class FilmServer extends HttpApp {
 
     @Override
     public Route routes() {
-        return path("films", this::getFilms);
+        return path("films", this::getFilms)
+                    .orElse(path(segment("films").slash(segment()), slug ->
+                route(getFilm(slug)))
+                    );
 
     }
 
@@ -43,6 +49,20 @@ class FilmServer extends HttpApp {
                     });
                 })
         );
+    }
+
+    private Route getFilm(String slug) {
+        return get(() -> {
+            CompletionStage<Optional<Film>> film = PatternsCS.ask(filmActor, new ActionPerformed(Actions.GETONE,slug), timeout)
+                    .thenApply(obj -> (Optional<Film>) obj);
+
+            return onSuccess(() -> film, performed -> {
+                if (performed.isPresent())
+                    return complete(StatusCodes.OK, performed.get(), Jackson.marshaller());
+                else
+                    return complete(StatusCodes.NOT_FOUND);
+            });
+        });
     }
 
     public static void main(String[] args) throws Exception {

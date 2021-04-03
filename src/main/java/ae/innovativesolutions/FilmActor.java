@@ -20,8 +20,10 @@ public class FilmActor extends AbstractActor {
 
     private FI.UnitApply<ActionPerformed> handleAction() {
         return action -> {
-            if(action.getAction().equals(Actions.GETALL))
+            if(action.getAction()==Actions.GETALL)
                 sender().tell(filmService.getFilms(), getSelf());
+            else if(action.getAction()==Actions.GETONE)
+                sender().tell(filmService.getFilm(action.getSlug()), getSelf());
 
         };
     }

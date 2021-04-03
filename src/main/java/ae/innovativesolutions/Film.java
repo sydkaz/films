@@ -3,6 +3,7 @@ package ae.innovativesolutions;
 public class Film {
     private final Long id;
     String name;
+    String slug;
     String description;
     String releaseDate;
     String rating;
@@ -11,8 +12,9 @@ public class Film {
     String genre;
     String photo;
 
-    public Film(Long id, String name, String description, String releaseDate, String rating, String ticketPrice, String country, String genre, String photo) {
+    public Film(Long id,String slug, String name, String description, String releaseDate, String rating, String ticketPrice, String country, String genre, String photo) {
         this.id = id;
+        this.slug = slug;
         this.name = name;
         this.description = description;
         this.releaseDate = releaseDate;
@@ -21,6 +23,14 @@ public class Film {
         this.country = country;
         this.genre = genre;
         this.photo = photo;
+    }
+
+    public String getSlug() {
+        return slug;
+    }
+
+    public void setSlug(String slug) {
+        this.slug = slug;
     }
 
     public Long getId() {
