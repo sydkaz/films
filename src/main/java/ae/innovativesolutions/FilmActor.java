@@ -4,10 +4,10 @@ import akka.actor.AbstractActor;
 import akka.actor.Props;
 import akka.japi.pf.FI;
 
-public class FilmActor extends AbstractActor {
+class FilmActor extends AbstractActor {
     private FilmService filmService = new FilmService();
 
-    static Props props() {
+    public static Props props() {
         return Props.create(FilmActor.class);
     }
 
