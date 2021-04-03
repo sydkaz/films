@@ -4,6 +4,7 @@ import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.http.javadsl.marshallers.jackson.Jackson;
 import akka.http.javadsl.model.StatusCodes;
+import akka.http.javadsl.model.Uri;
 import akka.http.javadsl.server.HttpApp;
 import akka.http.javadsl.server.Route;
 import akka.pattern.PatternsCS;
@@ -30,10 +31,10 @@ class FilmServer extends HttpApp {
 
     @Override
     public Route routes() {
-        return path("films", this::getFilms)
-                    .orElse(path(segment("films").slash(segment()), slug ->
-                route(getFilm(slug)))
-                    );
+        return path("", () -> route( pathEnd(() -> redirect(Uri.create("/films"), StatusCodes.TEMPORARY_REDIRECT)) ))
+                .orElse(path(segment("films"),()->route(getFilms())))
+                .orElse(path(segment("films").slash(segment()), slug -> route(getFilm(slug))))
+                .orElse(path(segment("films"),()->route(addFilm())));
 
     }
 
@@ -51,6 +52,16 @@ class FilmServer extends HttpApp {
         );
     }
 
+    private Route addFilm() {
+        return post(() -> entity(Jackson.unmarshaller(Film.class), film -> {
+            CompletionStage<ActionPerformed> filmAdded = PatternsCS.ask(filmActor, new ActionPerformed(Actions.ADD,film), timeout)
+                    .thenApply(obj -> (ActionPerformed) obj);
+
+            return onSuccess(() -> filmAdded, performed -> {
+                return complete(StatusCodes.CREATED, performed.getMessage(), Jackson.marshaller());
+            });
+        }));
+    }
     private Route getFilm(String slug) {
         return get(() -> {
             CompletionStage<Optional<Film>> film = PatternsCS.ask(filmActor, new ActionPerformed(Actions.GETONE,slug), timeout)

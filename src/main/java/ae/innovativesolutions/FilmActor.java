@@ -24,6 +24,14 @@ public class FilmActor extends AbstractActor {
                 sender().tell(filmService.getFilms(), getSelf());
             else if(action.getAction()==Actions.GETONE)
                 sender().tell(filmService.getFilm(action.getSlug()), getSelf());
+            else if(action.getAction()==Actions.ADD) {
+                    filmService.addFilm(action.getFilm());
+                    sender().tell(new ActionPerformed(String.format("Film %s Added.",action.getFilm().getName())), getSelf());
+                }
+            else
+                sender().tell(new ActionPerformed("Resource not availabel"), getSelf());
+
+
 
         };
     }

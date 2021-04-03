@@ -1,7 +1,7 @@
 package ae.innovativesolutions;
 
 enum Actions {
-    CREATE,
+    ADD,
     GETONE,
     GETALL
 }
@@ -10,6 +10,10 @@ public class ActionPerformed {
     Actions action;
     String slug;
     Film film;
+    String message;
+    public ActionPerformed(String message){
+        this.message = message;
+    }
     public ActionPerformed(Actions action){
         this.action = action;
     }
@@ -35,5 +39,7 @@ public class ActionPerformed {
         return film;
     }
 
-
+    public String getMessage() {
+        return message;
+    }
 }

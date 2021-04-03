@@ -11,6 +11,10 @@ public class Film {
     String country;
     String genre;
     String photo;
+    public Film(){
+        this.id = null;
+        this.slug = "";
+    }
 
     public Film(Long id,String slug, String name, String description, String releaseDate, String rating, String ticketPrice, String country, String genre, String photo) {
         this.id = id;

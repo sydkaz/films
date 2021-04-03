@@ -37,4 +37,7 @@ public class FilmService {
     return films;
   }
 
+ public void addFilm(Film film) {
+        films.add(film);
+ }
 }
