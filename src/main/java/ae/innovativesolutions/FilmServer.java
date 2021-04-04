@@ -1,7 +1,9 @@
 package ae.innovativesolutions;
 
+
+import ae.innovativesolutions.components.ActionPerformed;
+import ae.innovativesolutions.model.Film;
 import akka.actor.ActorRef;
-import akka.actor.ActorSystem;
 import akka.http.javadsl.marshallers.jackson.Jackson;
 import akka.http.javadsl.model.StatusCodes;
 import akka.http.javadsl.model.Uri;
@@ -9,25 +11,22 @@ import akka.http.javadsl.server.HttpApp;
 import akka.http.javadsl.server.Route;
 import akka.pattern.PatternsCS;
 import akka.util.Timeout;
+import org.springframework.beans.factory.annotation.Autowired;
 import scala.concurrent.duration.Duration;
 
 import java.util.*;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 
-import static akka.http.javadsl.server.PathMatchers.longSegment;
 import static akka.http.javadsl.server.PathMatchers.segment;
 
-
 class FilmServer extends HttpApp {
-
-    private final ActorRef filmActor;
+    @Autowired
+    ActorRef filmActor;
 
     Timeout timeout = new Timeout(Duration.create(3, TimeUnit.HOURS));
 
-    FilmServer(ActorRef filmActor) {
-        this.filmActor = filmActor;
-    }
+
 
     @Override
     public Route routes() {
@@ -76,11 +75,6 @@ class FilmServer extends HttpApp {
         });
     }
 
-    public static void main(String[] args) throws Exception {
-        ActorSystem system = ActorSystem.create("filmServer");
-        ActorRef filmActorRef = system.actorOf(FilmActor.props(), "filmActor");
-        FilmServer server = new FilmServer(filmActorRef);
-        server.startServer("localhost", 8282, system);
-    }
+
 
 }

@@ -1,15 +1,41 @@
-package ae.innovativesolutions;
+package ae.innovativesolutions.model;
 
+
+import javax.persistence.*;
+
+@Entity
+@Table(name="film")
 public class Film {
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private final Long id;
+
+    @Column(name="name", columnDefinition = "TEXT")
     String name;
+
+    @Column(name="slug", columnDefinition = "TEXT")
     String slug;
+
+    @Column(name="description", columnDefinition = "TEXT")
     String description;
+
+
+    @Column(name="releaseDate", columnDefinition = "TEXT")
     String releaseDate;
+
+    @Column(name="rating", columnDefinition = "TEXT")
     String rating;
+
+    @Column(name="ticketPrice", columnDefinition = "TEXT")
     String ticketPrice;
+
+    @Column(name="country", columnDefinition = "TEXT")
     String country;
+
+    @Column(name="genre", columnDefinition = "TEXT")
     String genre;
+    @Lob
+    @Column(name="photo")
     String photo;
     public Film(){
         this.id = null;
@@ -103,5 +129,21 @@ public class Film {
 
     public void setPhoto(String photo) {
         this.photo = photo;
+    }
+
+    @Override
+    public String toString() {
+        return "Film{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", slug='" + slug + '\'' +
+                ", description='" + description + '\'' +
+                ", releaseDate='" + releaseDate + '\'' +
+                ", rating='" + rating + '\'' +
+                ", ticketPrice='" + ticketPrice + '\'' +
+                ", country='" + country + '\'' +
+                ", genre='" + genre + '\'' +
+                ", photo='" + photo + '\'' +
+                '}';
     }
 }

@@ -1,9 +1,13 @@
-package ae.innovativesolutions;
+package ae.innovativesolutions.services;
+
+import ae.innovativesolutions.model.Film;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Component
 public class FilmService {
 
   private final static List<Film> films = new ArrayList<>();

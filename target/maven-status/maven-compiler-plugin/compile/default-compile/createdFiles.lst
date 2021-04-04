@@ -1,1 +1,15 @@
-ae/innovativesolutions/Film.class
+ae/innovativesolutions/controller/HelloController.class
+ae/innovativesolutions/Actions.class
+ae/innovativesolutions/repositoriy/FilmRepository.class
+ae/innovativesolutions/controller/FilmController.class
+ae/innovativesolutions/ActionPerformed.class
+ae/innovativesolutions/services/FilmService.class
+ae/innovativesolutions/AkkaApplication.class
+ae/innovativesolutions/FilmServer.class
+ae/innovativesolutions/extension/SpringExtension.class
+ae/innovativesolutions/AkkaConfig.class
+ae/innovativesolutions/extension/SpringActorProducer.class
+ae/innovativesolutions/configuration/ApplicationConfiguration.class
+ae/innovativesolutions/model/Film.class
+ae/innovativesolutions/model/Address.class
+ae/innovativesolutions/actors/FilmActor.class

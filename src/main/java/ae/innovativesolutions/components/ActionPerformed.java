@@ -1,23 +1,30 @@
-package ae.innovativesolutions;
+package ae.innovativesolutions.components;
 
-enum Actions {
-    ADD,
-    GETONE,
-    GETALL
-}
 
+import ae.innovativesolutions.Actions;
+import ae.innovativesolutions.model.Film;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ActionPerformed {
     Actions action;
     String slug;
     Film film;
     String message;
+
     public ActionPerformed(String message){
         this.message = message;
     }
     public ActionPerformed(Actions action){
         this.action = action;
     }
+    public ActionPerformed(){
 
+    }
     public ActionPerformed(Actions action,String slug){
         this.action = action;
         this.slug = slug;
