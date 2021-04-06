@@ -1,0 +1,45 @@
+app:
+  jwtExpirationInMs: 604800000
+jwt:
+  secret: MyScret
+logging:
+  level: error
+  level.org.hibernate: ERROR
+  level.org.hibernate.SQL: debug
+  level.org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+  level.org.prime: INFO
+  level.org.springframework.web: INFO
+  pattern:
+    console: '%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n'
+server:
+  port: 7777
+spring:
+  application:
+    name: Test
+  jackson:
+    serialization:
+      INDENT_OUTPUT: true
+      FAIL_ON_EMPTY_BEANS: false
+  thymeleaf:
+    cache: false
+    enabled: true
+    prefix: classpath:/templates/
+    suffix: .html
+  datasource:
+    driverClassName: org.h2.Driver
+    password: ''
+    url: jdbc:h2:mem:testdb
+    username: sa
+  h2:
+    console:
+      enabled: true
+      path: /h2
+      settings:
+        web-allow-others: true
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+  mvc:
+    static-path-pattern: "/resources/**"
+
+file:
+  uploadLocation: "/src/main/upload/static/images/"

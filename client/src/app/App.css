@@ -1,0 +1,27 @@
+.app-content {
+  margin-top: 64px;   
+}
+li.ant-menu-item {
+  font-size: 1.25em;
+}
+
+.textarea {
+  max-width: 100%;
+  height: auto;
+  vertical-align: bottom;
+  -webkit-transition: all .3s, height 0s;
+  -o-transition: all .3s, height 0s;
+  transition: all .3s, height 0s;
+  min-height: 32px;
+}
+
+textarea.textarea {
+  max-width: 100%;
+  width: 100%;
+  height: auto;
+  vertical-align: bottom;
+  -webkit-transition: all .3s, height 0s;
+  -o-transition: all .3s, height 0s;
+  transition: all .3s, height 0s;
+  min-height: 32px;
+}

@@ -1,0 +1,14 @@
+.no-film-found {
+    font-size: 20px;
+    text-align: center;
+    padding: 20px;    
+}
+
+.load-more-films {
+    text-align: center;
+    margin-bottom: 40px;    
+}
+
+.no-films-found {
+    text-align: center;
+}
