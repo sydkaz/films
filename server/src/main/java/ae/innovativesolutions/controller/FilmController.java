@@ -74,7 +74,7 @@ public class FilmController {
                 .fromCurrentRequest().path("/{filmId}")
                 .buildAndExpand(filmAdded.toCompletableFuture().get().getMessage()).toUri();
         return ResponseEntity.created(location)
-                .body(new ApiResponse(true, "Poll Created Successfully"));
+                .body(new ApiResponse(true, "Film Created Successfully"));
     }
 
 
