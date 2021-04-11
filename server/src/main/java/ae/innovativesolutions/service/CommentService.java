@@ -33,7 +33,7 @@ public class CommentService {
     @Autowired
     UserRepository userRepository;
 
-    public Comment createComment(String slug, @Valid CommentPayload commentPayload, Principal principal) {
+    public Comment createComment(String slug, @Valid CommentPayload commentPayload) {
         JwtUser jwtUser = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 

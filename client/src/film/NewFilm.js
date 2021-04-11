@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, useEffect, useState} from 'react';
 import {createFilm} from '../util/APIUtils';
 import {useHistory} from "react-router-dom";
 
@@ -9,11 +9,14 @@ import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import IssuePhotoUpload from "./IssuePhotoUpload";
 import {convertToSlug} from "../util/Helpers";
+import SockJS from 'sockjs-client'; // Note this line
 
+import {ACCESS_TOKEN, API_BASE_URL} from "../constants";
+import SockJsClient from "react-stomp";
 const Option = Select.Option;
 const FormItem = Form.Item;
 const {TextArea} = Input
-
+let stompClient = null;
 const schema = yup.object().shape({
     name: yup.string().required(),
     description: yup.string().required(),
@@ -25,8 +28,8 @@ const schema = yup.object().shape({
     photo: yup.string()
 });
 
-
 const NewFilm = () => {
+
     let history = useHistory();
     const submitForm = (data) => {
         const filmObject = {
@@ -40,24 +43,7 @@ const NewFilm = () => {
             slug: convertToSlug(data.name),
             ticketPrice: data.ticketPrice
         };
-
-        createFilm(filmObject)
-            .then(response => {
-                notification.success({
-                    message: 'Film App',
-                    description: response.message
-                });
-                setTimeout(()=>history.push("/"),2000);
-            }).catch(error => {
-            if (error.status === 401) {
-                this.props.handleLogout('/login', 'error', 'You have been logged out. Please login to create film.');
-            } else {
-                notification.error({
-                    message: 'Film App',
-                    description: error.message || 'Sorry! Something went wrong. Please try again!'
-                });
-            }
-        });
+        this.clientRef.sendMessage(`/film/new/create`, JSON.stringify(filmObject));
     }
 
     const callbackArray = [() => console.log('Hi!'), () => console.log('Ho!')];
@@ -102,6 +88,20 @@ const NewFilm = () => {
 
     return (
         <div className="new-film-container">
+            <SockJsClient url={`${API_BASE_URL}/ws`}
+                          topics={['/user/queue/notification']}
+                          ref={ (client) => { this.clientRef = client }}
+                          onMessage={(response) => {
+                              notification.success({
+                                  message: 'Film App',
+                                  description: response.message
+                              });
+                          }}
+                          onConnect={()=>{
+
+                          }}
+            />
+
             <h1 className="page-title">Create New Film</h1>
             <div className="new-film-content">
                 <Form onSubmit={handleSubmit((d) => submitForm(d))} className="create-film-form">

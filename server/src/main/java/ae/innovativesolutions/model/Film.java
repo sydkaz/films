@@ -59,7 +59,9 @@ public class Film {
     @BatchSize(size = 30)
     private List<Comment> comments = new ArrayList<>();
 
-    public Film(int id,String slug, String name, String description, String releaseDate, String rating, String ticketPrice, String country, String genre, String photo) {
+
+
+    public Film(int id, String slug, String name, String description, String releaseDate, String rating, String ticketPrice, String country, String genre, String photo) {
         this.id = id;
         this.slug = slug;
         this.name = name;

@@ -42,8 +42,6 @@ public class FilmActor extends AbstractActor {
             else
                 sender().tell(new FilmActionPerformed("Resource not available"), getSelf());
 
-
-
         };
     }
 }

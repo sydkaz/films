@@ -186,6 +186,7 @@
     margin: 0 auto;
     display: block;
     padding: 1em 0em;
+    width: 100%;
 }
 
 .ant-tag {

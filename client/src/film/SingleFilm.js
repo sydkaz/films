@@ -1,4 +1,4 @@
-import React, {Component, useEffect, useState} from 'react';
+import React, {Component, useEffect, useState, useRef} from 'react';
 
 import {getCurrentUser, getSingleFilm} from '../util/APIUtils';
 import {Avatar, Badge, Button, Icon, notification, Tabs} from 'antd';
@@ -6,46 +6,27 @@ import {Avatar, Badge, Button, Icon, notification, Tabs} from 'antd';
 import {formatDate} from '../util/Helpers';
 import LoadingIndicator from '../common/LoadingIndicator';
 import './SingleFilm.css';
-
+import SockJsClient from 'react-stomp';
 
 import Comment from "./Comment";
 import NotFound from "../common/NotFound";
 import ServerError from "../common/ServerError.css";
 import {Link} from "react-router-dom";
 import CommentCard from "./CommentCard"
+import SockJS from 'sockjs-client'; // Note this line
+import Stomp from 'stompjs';
+import {ACCESS_TOKEN, API_BASE_URL} from "../constants";
+
 const TabPane = Tabs.TabPane;
 
 const SingleFilm = (props) => {
+    let stompClient = null;
     const [film, setFilm] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [notFound, setNotFound] = useState(null);
     const [serverError, setServerError] = useState(null);
     const [filmSlug, setFilmSlug] = useState(null);
-
-    function loadUserProfile(filmslug) {
-        setIsLoading(true);
-
-        getSingleFilm(filmslug)
-            .then(response => {
-                setFilm(response);
-                setIsLoading(false);
-            }).catch(error => {
-            if (error.status === 404) {
-                setNotFound(true);
-                setIsLoading(false);
-            } else {
-                setServerError(true);
-                setIsLoading(false);
-            }
-        });
-    }
-
-
-    useEffect(() => {
-        const film = props.match.params.filmslug;
-        setFilmSlug(film);
-        loadUserProfile(film);
-    }, []);
+    const clientRef = useRef(null);
 
     const tabBarStyle = {
         textAlign: 'center'
@@ -54,22 +35,27 @@ const SingleFilm = (props) => {
     if(isLoading) {
         return <LoadingIndicator />;
     }
-
-    if(notFound) {
-        return <NotFound />;
-    }
-
-    if(serverError) {
-        return <ServerError />;
-    }
-
-    
+    useEffect(()=>{
+        setFilmSlug(props.match.params.filmslug);
+    },[])
 
     return (
 
         <div className="profile">
+            <SockJsClient url={`${API_BASE_URL}/ws`}
+                          topics={['/user/queue/film']}
+                          ref={ (client) => { this.clientRef = client }}
+                          onMessage={(msg) => {
+                              setFilm(msg)
+                          }}
+                          onConnect={()=>{
+                              this.clientRef.sendMessage(`/film/${props.match.params.filmslug}`)
+                          }}
+            />
             {
+
                 film ? (
+
                     <div className="film-content">
                         <div className="film-header">
                             <img src={film.photo} className={"film-banner"}/>
@@ -117,6 +103,7 @@ const SingleFilm = (props) => {
                     </div>
                 ) : null
             }
+
         </div>
 
     )
